@@ -1,13 +1,29 @@
 const gulp = require('gulp');
-
 const browserSync = require('browser-sync').create();
-
 const watch = require('gulp-watch');
+
+const sass = require('gulp-sass')(require('sass'));
+
+// Таск для компиляции SCSS в CSS
+gulp.task('scss', function (callback) {
+    return gulp.src('./app/scss/main.scss')
+        .pipe(sass())
+        .pipe(gulp.dest('./app/css/'))
+    callback();
+});
+// const sass = require('gulp-sass');
+
+// gulp.task('scss', function (callback) {
+//     return gulp.src('./app/scss/main.scss')
+//         .pipe(sass())
+//         .pipe(gulp.dest('./app/css/'))
+//     callback();
+// });
 
 //обновление указанного афйла (слежка за ним)
 
 gulp.task('watch', function () {
-    watch(['./app/*.html', './app/css/*.css'], gulp.parallel(browserSync.reload));
+    watch(['./app/*.html', './app/css/**/*.css'], gulp.parallel(browserSync.reload));
 });
 
 //задача для старта сервера из папки
