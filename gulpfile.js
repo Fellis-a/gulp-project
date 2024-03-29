@@ -8,6 +8,25 @@ const sourcemaps = require('gulp-sourcemaps');
 
 const plumber = require('gulp-plumber');
 const notify = require("gulp-notify");
+const fileinclude = require('gulp-file-include');
+
+
+//таск для сборки html из шаблонов
+gulp.task('html', function (callback) {
+    return gulp.src('./app/html/*.html')
+        .pipe(plumber({
+            errorHandler: notify.onError(function (err) {
+                return {
+                    title: 'HTML include',
+                    sound: false,
+                    message: err.message
+                }
+            })
+        }))
+        .pipe(fileinclude({ prefix: '@@' }))
+        .pipe(gulp.dest('./app/'))
+    callback();
+});
 
 // Таск для компиляции SCSS в CSS
 gulp.task('scss', function (callback) {
@@ -55,6 +74,8 @@ gulp.task('watch', function () {
     watch('./app/scss/**/*.scss', function () {
         setTimeout(gulp.parallel('scss'), 1000)
     })
+
+    watch('./app/html/**/*.html', gulp.parallel('html'))
 
 });
 
